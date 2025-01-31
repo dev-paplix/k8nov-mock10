@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker
+spec:
+  selector:
+    matchLabels:
+      app: worker
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: worker
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - worker
+            topologyKey: "kubernetes.io/hostname"
+      containers:
+      - name: redis-server
+        image: redis:3.2-alpine

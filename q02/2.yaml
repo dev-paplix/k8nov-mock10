@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-headless
+  labels:
+    app: redis-headless
+spec:
+  ports:
+  - port: 80
+    name: redis-headless
+  clusterIP: None
+  selector:
+    app: redis-cluster
+
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis-cluster
+spec:
+  selector:
+    matchLabels:
+      app: redis-cluster
+  serviceName: "redis-headless"
+  replicas: 4
+  minReadySeconds: 10 # by default is 0
+  template:
+    metadata:
+      labels:
+        app: redis-cluster
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: redis
+        image: redis:7
+  volumeClaimTemplates:
+  - metadata:
+      name: redis-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "local-path"
+      resources:
+        requests:
+          storage: 10Gi

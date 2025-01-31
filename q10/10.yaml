@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: payments-service
+  name: payments-service
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: payments-service
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: payments-service
+    spec:
+      containers:
+      - image: nginx
+        name: nginx
+        resources: {}
+status: {}
+
+---
+
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: pdb-payments
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: payments-service

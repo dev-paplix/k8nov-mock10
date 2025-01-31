@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: log-agent
+  labels:
+    app: log-agent
+spec:
+  selector:
+    matchLabels:
+      name: log-agent
+  template:
+    metadata:
+      labels:
+        name: log-agent
+    spec:
+      containers:
+      - name: fluentd
+        image: quay.io/fluentd_elasticsearch/fluentd:v2.5.2
+        command: ["/bin/sh", "-c", 'i=0; while true; do echo "Running"; i=$((i+1)); sleep 10; done']

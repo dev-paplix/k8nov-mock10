@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: app-server
+  name: app-server
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: app-server
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: app-server
+    spec:
+      containers:
+      - image: nginx:1.25
+        name: nginx
+        ports:
+        - containerPort: 8080
+        resources: {}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 2
+      maxSurge: 3
+status: {}
