@@ -1,3 +1,5 @@
+Azry Syafiqah
+
 1. Create a Deployment with Rolling Update Strategy
 Create a Deployment named app-server in the production namespace with:
 
@@ -64,7 +66,7 @@ Grants full admin rights over all resources
 Create a ServiceAccount admin-user and bind it using a RoleBinding.
 Ensure admin-user can create, delete, and modify resources in staging but not in other namespaces.
 
-9. Schedule a Pod Using Taints and Tolerations
+9. Schedule a Pod UsingTaints and Tolerations
 Label a node with key=dedicated, value=critical
 Taint the node with key=dedicated:NoSchedule
 Deploy a Pod named critical-service running ubuntu:latest that tolerates the taint

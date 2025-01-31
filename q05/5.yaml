@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: api-credentials
+  namespace: sec
+stringData:
+  api_key: "MY_SECRET_KEY_1234"
+  api_token: "SuperSecureToken9876"
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: api-client
+  namespace: sec 
+spec:
+  volumes:
+    - name: secret-volume
+      secret:
+        secretName: api-credentials
+  containers:
+    - name: python
+      image: python:3.8
+      volumeMounts:
+        - name: secret-volume
+          readOnly: true
+          mountPath: "/etc/secrets"

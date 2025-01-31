@@ -1,0 +1,55 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: fast-storage
+provisioner: kubernetes.io/aws-ebs
+reclaimPolicy: Delete
+allowVolumeExpansion: true
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-storage
+spec:
+  capacity:
+    storage: 8Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Recycle
+  storageClassName: fast-storage
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: storage-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: fast-storage
+  resources:
+    requests:
+      storage: 8Gi
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: storage-user
+spec:
+  containers:
+  - name: nginx
+    image: nginx:latest
+    volumeMounts:
+    - mountPath: /var
+      name: volume
+      readOnly: true
+  volumes:
+  - name: volume
+    hostPath:
+      path: /data/mnt
