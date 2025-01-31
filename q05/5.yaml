@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: api-credential
+data:
+  api_key: TVlfU0VDUkVUX0tFWV8xMjM0
+  api_token: U3VwZXJTZWN1cmVUb2tlbjk4NzY=
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: api-client
+spec:
+  containers:
+  - name: python
+    image: python:3.8
+    command: ["sleep", "3600"]
+    volumeMounts:
+    - mountPath: "/etc/secrets/"
+      name: secrets
+  volumes:
+    - name: secrets
+      secret:
+        secretName: api-credential
