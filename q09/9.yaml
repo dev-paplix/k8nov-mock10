@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: critical-service
+  name: critical-service
+spec:
+  containers:
+  - image: ubuntu:latest
+    name: critical-service
+    resources: {}
+  tolerations:
+  - key: "dedicated"
+    operator: "Equal"
+    value: "critical"
+    effect: "NoSchedule" 

@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: config-volume-pod
+  labels:
+    app: busybox
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: busybox
+  template:
+    metadata:
+      labels:
+        app: busybox
+    spec:
+      containers:
+      - name: busybox
+        image: busybox
+        command: [ "sleep", "3600" ]
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/app-config/
+      volumes:
+        - name: config-volume
+          configMap:
+            name: web-config
