@@ -1,0 +1,23 @@
+# kubectl autoscale deployment autoscale-app --cpu-percent=65 --min=3 --max=15
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: autoscale-app
+  labels:
+    app: autoscale-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: autoscale-app
+  template:
+    metadata:
+      labels:
+        app: autoscale-app
+    spec:
+      containers:
+      - name: autoscale-app
+        image: httpd:2.4
+        ports:
+        - containerPort: 80

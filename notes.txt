@@ -1,0 +1,2 @@
+1. can we use default storageclass
+2. always saw readonly in mount secret or configmap

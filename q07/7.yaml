@@ -1,0 +1,13 @@
+
+export ETCDCTL_API=3
+mkdir /var/backups
+mkdir /var/backups/manifests
+etcdctl --endpoints 127.0.0.1:2379 --cert=/etc/kubernetes/pki/etcd/server.crt --key=/etc/kubernetes/pki/etcd/server.key --cacert=/etc/kubernetes/pki/etcd/ca.crt snapshot save /var/backups/etcd.db
+# delete the things
+etcdctl snapshot restore /var/backups/etcd.db
+mv /etc/kubernetes/manifests/* /var/backups/manifests
+mv /var/lib/etcd/member /var/lib/etcd/member.bak
+mv ./default.etcd/* /var/lib/etcd
+systemctl stop kubelet.service
+mv /var/backups/manifests/* /etc/kubernetes/manifests
+systemctl start kubelet.service
