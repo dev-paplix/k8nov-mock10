@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: admin-user
+  namespace: staging
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: staging
+  name: admin-role
+rules:
+  - apiGroups: [""]
+    resources: ["*"]
+    verbs: ["*"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: admin-user-rb
+  namespace: staging
+subjects:
+  - kind: ServiceAccount
+    name: admin-user
+    namespace: staging
+roleRef:
+  kind: Role
+  name: admin-role
+  apiGroup: rbac.authorization.k8s.io
