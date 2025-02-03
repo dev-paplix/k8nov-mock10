@@ -1,0 +1,55 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: fast-storage
+provisioner: rancher.io/local-path # or appropriate for your cloud
+reclaimPolicy: Delete
+allowVolumeExpansion: true
+volumeBindingMode: WaitForFirstConsumer
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: storage-pv
+spec:
+  capacity:
+    storage: 8Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: fast-storage
+  hostPath:
+    path: "/mnt/"
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: storage-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: fast-storage
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: storage-user
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+      volumeMounts:
+        - name: site-data
+          mountPath: /etc/config
+  volumes:
+    - name: site-data
+      persistentVolumeClaim:
+        claimName: storage-pvc
