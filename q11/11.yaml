@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: autoscale-app
+  name: autoscale-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: autoscale-app
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: autoscale-app
+    spec:
+      containers:
+      - image: httpd:2.4
+        name: httpd
+        resources:
+          requests:
+            cpu: "200m"
+status: {}
+---
+kubectl autoscale deployment.apps/autoscale-app --min=3 --max=15 --cpu-percent=65
