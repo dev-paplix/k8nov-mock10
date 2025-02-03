@@ -1,0 +1,16 @@
+kubectl label node node01 dedicated=critical
+kubectl taint node node01 key=dedicated:NoSchedule
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: critical-service
+spec:
+  containers:
+    - name: critical-service
+      image: ubuntu:latest
+  tolerations:
+    - key: "key"
+      operator: "Equal"
+      value: "dedicated"
+      effect: "NoSchedule"

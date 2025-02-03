@@ -1,0 +1,26 @@
+apiVersion: v1
+data:
+  APP_MODE: production
+  CACHE_TIMEOUT: "60"
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: web-config
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: config-volume-pod
+spec:
+  containers:
+    - name: config-volume-pod
+      image: busybox
+      volumeMounts:
+        - name: config
+          mountPath: "/etc/app-config/"
+          readOnly: true
+  volumes:
+    - name: config
+      configMap:
+        name: web-config
