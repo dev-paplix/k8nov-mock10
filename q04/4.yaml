@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: web-config
+data:
+  player_initial_lives: "production"
+  CACHE_TIMEOUT: "60"
+
+---
+
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: config-volume-pod
+spec:
+  containers:
+    - name: busybox
+      image: busybox:latest
+      command: ["sleep", "3600"]
+      env:
+        - name: player_initial_lives
+          valueFrom:
+            configMapKeyRef:
+              name: web-config
+              key: player_initial_lives
+        - name: CACHE_TIMEOUT
+          valueFrom:
+            configMapKeyRef:
+              name: web-config
+              key: CACHE_TIMEOUT:
+      volumeMounts:
+      - name: config
+        mountPath: "/etc/app-config/"
+        readOnly: true
+  volumes:
+  - name: config
+    configMap:
+      name: web-config
+      items:
+      - key: "app.cfg"
+        path: "app.cfg"
