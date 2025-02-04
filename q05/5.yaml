@@ -20,10 +20,6 @@ spec:
   containers:
     - name: api-client
       image: python:3.8
-      command:
-        - ls
-        - "-l"
-        - "/etc/secrets"
       volumeMounts:
         - name: api-credentials
           readOnly: true

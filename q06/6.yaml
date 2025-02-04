@@ -4,12 +4,9 @@ metadata:
   name: internal-only
   namespace: payments
 spec:
+  podSelector: {}
   policyTypes:
   - Ingress
   ingress:
   - from:
-    - namespaceSelector:
-        matchExpressions:
-        - key: namespace
-          operator: In
-          values: ["payments"]
+    - podSelector: {}
