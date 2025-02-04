@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  creationTimestamp: null
+  labels:
+    app: redis-cluster
+  name: redis-cluster
+  namespace: caching
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: redis-cluster
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: redis-cluster
+    spec:
+      containers:
+        - image: redis:7
+          name: redis-cluster
+          resources: {}
+          volumeMounts:
+            - mountPath: /var/lib/
+              name: site-data
+      volumes:
+        - name: site-data
+          persistentVolumeClaim:
+            claimName: redis-data
+status: {}
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redis-data
+  namespace: caching
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: local-path
